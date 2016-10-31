@@ -55,11 +55,12 @@ public class PhotoRepository {
         try {
             for (ImagesTable image : mPhotos) {
                 // save the file hash first
-                ImageHash hash = new ImageHash(image.getUid(), EncryptionUtil.md5(image.getImageString().toString()));
+                String imageString = ImageUtil.getImageByteString(image.getImageBitmap());
+                ImageHash hash = new ImageHash(image.getUid(), EncryptionUtil.md5(imageString));
                 hash.save();
 
                 //encrypt the file then save
-                image.setImageString(EncryptionUtil.encryptImage(password, image.getImageString()));
+                image.setImageString(EncryptionUtil.encryptImage(password, imageString));
                 image.save();
             }
 

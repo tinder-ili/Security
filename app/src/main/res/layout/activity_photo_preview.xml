@@ -45,7 +45,7 @@
         android:layout_marginRight="@dimen/margin_med"/>
 
     <Button
-        android:id="@+id/done_button"
+        android:id="@+id/save_button"
         android:layout_margin="@dimen/margin_med"
         android:layout_gravity="center_horizontal"
         android:text="Save"

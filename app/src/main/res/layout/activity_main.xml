@@ -24,7 +24,29 @@
         android:gravity="center_horizontal"
         android:text="Looks like you haven't setup your facial recognition, hit the button below to start."/>
 
+    <EditText
+        android:id="@+id/passowrd_1"
+        android:layout_width="300dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:hint="Type your Password"
+        android:inputType="textPassword"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="@dimen/margin_med"
+        android:layout_marginRight="@dimen/margin_med"/>
 
+    <EditText
+        android:id="@+id/passowrd_2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        android:inputType="textPassword"
+        android:hint="Retype your Password"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="@dimen/margin_med"
+        android:layout_marginRight="@dimen/margin_med"/>
     <Button
         android:id="@+id/take_photo"
         android:layout_width="300dp"

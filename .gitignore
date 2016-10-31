@@ -7,3 +7,8 @@
 /build
 /captures
 .externalNativeBuild
+*.iml
+
+.idea/
+app/app.iml
+*.iml

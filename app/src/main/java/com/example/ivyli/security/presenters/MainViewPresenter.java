@@ -1,6 +1,7 @@
 package com.example.ivyli.security.presenters;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.ivyli.security.activity.MainActivity;
@@ -44,12 +45,26 @@ public class MainViewPresenter extends BasePresenter<MainActivity> {
                         }
 
                         if (aBoolean) {
-                            target.setRetakePhotoButton();
+                            target.initRetakePhoto();
                         } else {
-                            target.setTakePhotoText();
+                            target.initTakePhoto();
                         }
                     }
                 });
+    }
+
+    public void retakePhoto(String password1, String password2) {
+        MainActivity target = getTarget();
+        if (target == null) {
+            return;
+        }
+        if (!TextUtils.isEmpty(password1) && !TextUtils.isEmpty(password2) && password1.equals(password2)) {
+            target.clearPasswordFields();
+            target.startPhotoActivity();
+        } else {
+            target.clearPasswordFields();
+            target.retakePhotoPasswordError();
+        }
     }
 
 }

@@ -31,13 +31,20 @@ public class PhotoPreviewPresenter extends BasePresenter<PhotoPreviewActivity> {
     }
 
     public void savePhotos(String password1, String password2) {
-        if (TextUtils.isEmpty(password1) && TextUtils.isEmpty(password2) && password1.equals(password2)) {
+        if (!TextUtils.isEmpty(password1) && !TextUtils.isEmpty(password2) && password1.equals(password2)) {
             mRepository.savePhotos(password1);
 
             PhotoPreviewActivity target = getTarget();
             if (target != null) {
                 target.finish();
             }
+        }else{
+            PhotoPreviewActivity target = getTarget();
+            if(target == null){
+                return;
+            }
+
+            target.passwordError();
         }
     }
 }

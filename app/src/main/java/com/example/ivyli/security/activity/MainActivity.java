@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ivyli.security.R;
 import com.example.ivyli.security.core.SecurityApplication;
@@ -17,10 +19,13 @@ import com.example.ivyli.security.presenters.MainViewPresenter;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 5555;
 
     private Button mButton;
     private TextView mTextHelp;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 5555;
+    private EditText mPassword1;
+    private EditText mPassword2;
+
     @Inject MainViewPresenter mPresenter;
 
     boolean permission = false;
@@ -32,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
         ((SecurityApplication) getApplication()).getAppComponent().inject(this);
 
         mButton = (Button) findViewById(R.id.take_photo);
+        mTextHelp = (TextView) findViewById(R.id.take_photo_help);
+        mPassword1 = (EditText) findViewById(R.id.passowrd_1);
+        mPassword2 = (EditText) findViewById(R.id.passowrd_2);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,31 +49,43 @@ public class MainActivity extends AppCompatActivity {
         mPresenter.initView();
     }
 
-    public void setRetakePhotoButton() {
+    public void initRetakePhoto() {
         String text = getResources().getString(R.string.retake_photo);
         mButton.setText(text);
+        mTextHelp.setText(getResources().getString(R.string.retake_photo_hint));
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mPresenter.retakePhoto(mPassword1.getText().toString(), mPassword2.getText().toString());
             }
         });
-
-        mTextHelp.setText(getResources().getString(R.string.retake_photo_hint));
     }
 
-    public void setTakePhotoText() {
+    public void initTakePhoto() {
         String text = getResources().getString(R.string.take_photo);
         mButton.setText(text);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = CameraActivity.getCameraActivityIntent(MainActivity.this);
-                startActivity(intent);
+                startPhotoActivity();
             }
         });
 
         mTextHelp.setText(getResources().getString(R.string.start_hint));
+    }
+
+    public void startPhotoActivity() {
+        Intent intent = CameraActivity.getCameraActivityIntent(MainActivity.this);
+        startActivity(intent);
+    }
+
+    public void clearPasswordFields(){
+        mPassword1.setText(null);
+        mPassword2.setText(null);
+    }
+
+    public void retakePhotoPasswordError() {
+        Toast.makeText(this, getResources().getString(R.string.password_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
