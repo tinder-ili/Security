@@ -8,8 +8,14 @@ import com.example.ivyli.security.db.ImagesTable;
 import com.example.ivyli.security.repository.PhotoRepository;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class PhotoPreviewPresenter extends BasePresenter<PhotoPreviewActivity> {
 
@@ -30,21 +36,57 @@ public class PhotoPreviewPresenter extends BasePresenter<PhotoPreviewActivity> {
         target.initView(photos);
     }
 
-    public void savePhotos(String password1, String password2) {
-        if (!TextUtils.isEmpty(password1) && !TextUtils.isEmpty(password2) && password1.equals(password2)) {
-            mRepository.savePhotos(password1);
+    public void savePhotos(final String password1, final String password2) {
+        Observable.fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                if (!TextUtils.isEmpty(password1) && password1.length() >= 8 && !TextUtils.isEmpty(password2) && password1.equals(password2)) {
+                    mRepository.savePhotos(password1);
+                    mRepository.savePassword(password1);
+                    return true;
 
-            PhotoPreviewActivity target = getTarget();
-            if (target != null) {
-                target.finish();
+                } else {
+                    return false;
+                }
             }
-        }else{
-            PhotoPreviewActivity target = getTarget();
-            if(target == null){
-                return;
-            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
 
-            target.passwordError();
-        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        PhotoPreviewActivity target = getTarget();
+                        if (target == null) {
+                            return;
+                        }
+
+                        target.dismissProgress();
+                    }
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        PhotoPreviewActivity target = getTarget();
+                        if (target == null) {
+                            return;
+                        }
+                        if (aBoolean) {
+                            target.finish();
+                            target.dismissProgress();
+
+                        } else {
+                            target.passwordError();
+                            target.dismissProgress();
+                        }
+                    }
+                });
+    }
+
+
+    public void clearCache(){
+        mRepository.clearCache();
     }
 }

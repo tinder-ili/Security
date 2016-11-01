@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.ivyli.security.R;
 import com.example.ivyli.security.core.SecurityApplication;
@@ -38,9 +39,18 @@ public class CameraActivity extends Activity {
         mPresenter.takeTarget(this);
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.dropTarget();
+    }
+
+    public void toast(int id) {
+        Toast.makeText(this, getResources().getString(id), Toast.LENGTH_SHORT).show();
+    }
+
+    public void toastWithArg(int id, int arg) {
+        Toast.makeText(this, getResources().getString(id, arg), Toast.LENGTH_SHORT).show();
     }
 }

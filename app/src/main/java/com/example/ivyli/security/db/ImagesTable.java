@@ -1,7 +1,5 @@
 package com.example.ivyli.security.db;
 
-import android.graphics.Bitmap;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -15,7 +13,8 @@ public class ImagesTable extends Model {
     @Column(name = "bitmap")
     private String mImage;
 
-    private Bitmap mBitmap;
+
+    private byte[] mImageByts;
 
     public ImagesTable() {
         super();
@@ -26,12 +25,12 @@ public class ImagesTable extends Model {
         mUid = id;
     }
 
-    public Bitmap getImageBitmap() {
-        return mBitmap;
+    public void setImageByts(byte[] byts) {
+        mImageByts = byts;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        mBitmap = bitmap;
+    public byte[] getImageByts() {
+        return mImageByts;
     }
 
     public void setImageString(String encrytedImage) {

@@ -5,7 +5,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-@Table(name = "Images")
+@Table(name = "ImagesHash")
 public class ImageHash extends Model {
     @Column(name = "photo_uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String mUid;
@@ -22,5 +22,13 @@ public class ImageHash extends Model {
 
         mUid = uid;
         mHash = hash;
+    }
+
+    public String getUid(){
+        return mUid;
+    }
+
+    public String getImageHash(){
+        return mHash;
     }
 }

@@ -5,33 +5,31 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.ivyli.security.R;
-import com.example.ivyli.security.db.ImagesTable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
-    private List<ImagesTable> mPhotos = new ArrayList<>();
+public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder> {
+    private List<String> mStatus = new ArrayList<>();
     private Context mContext;
 
-    public PhotoAdapter(List<ImagesTable> myDataset, Context context) {
+    public StatusAdapter(List<String> myDataset, Context context) {
         if (myDataset != null) {
-            mPhotos = myDataset;
+            mStatus = myDataset;
         }
         mContext = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public PhotoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public StatusAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                       int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.photo_row, parent, false);
+                .inflate(R.layout.view_status_row, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -39,39 +37,39 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (mPhotos == null || mPhotos.isEmpty()) {
+        if (mStatus == null || mStatus.isEmpty()) {
             return;
         }
-        holder.setImage(mPhotos.get(position).getImageByts(), mContext);
+        holder.setText(mStatus.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mPhotos.size();
+        return mStatus.size();
     }
 
-    public void setPhotos(List<ImagesTable> list) {
-        mPhotos.clear();
-        mPhotos.addAll(list);
+    public void addStatus(String value){
+        mStatus.add(value);
+        notifyDataSetChanged();
+    }
+
+    public void clear(){
+        mStatus.clear();
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public ImageView mImage;
+        public TextView mText;
 
         public ViewHolder(View v) {
             super(v);
-            mImage = (ImageView) v.findViewById(R.id.photo);
+            mText = (TextView) v.findViewById(R.id.status);
         }
 
-        public void setImage(byte[] data, Context context){
-            Glide.with(context)
-                    .load(data)
-                    .asBitmap()
-                    .override(500, 500)
-                    .into(mImage);
+        public void setText(String text){
+            mText.setText(text);
         }
     }
 }
